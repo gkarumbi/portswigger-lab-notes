@@ -38,3 +38,18 @@ where three is the number of column we are ordering by f you keeping increasing 
 ![Screenshot](img/sqli-orderby-column-enum.png)
 https://ac501f031fb27988c01106bf008d00f4.web-security-academy.net/filter?category=Pets' ORDER BY 4--
 The above generates an error because there's no forth column to order anything by mean we reached our maximum number of columns which is 3
+
+3. Determin the data type of the columns
+https://acd41ff61f229bd9c078074400f100af.web-security-academy.net/filter?category=Lifestyle'UNION select NULL,'r3AijW',NULL--
+each null postion represents a column of a particular data type
+iterate the position of the string until you get a 200 Ok
+meaning the data type you have inputted in this case a string"r3Aijw' corresponds with the data type of that particular column
+
+4. Retrieving data from other tables using an SQL UNION Injection attack
+To do this you must first do steps 2 and 3 i.e determine the number of columns in the a table and determine the data type of the columns
+
+https://ac961f081fc7cda7c06e47f20044001d.web-security-academy.net/filter?category=Gifts'UNION select username,password FROM users WHERE username='administrator'--
+NB// The reason why the above query works is because:
+a) The table gifts and user both contain 2 columns and hence the need for step 1 where we enumerated the number of columns we were looking for a table that contains
+the same number of columns as our user table that contains the username and password columns
+b) The password which is the second column of database users is of type string just like the description column in table gifts which is the second column and of type string
